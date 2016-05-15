@@ -13,10 +13,12 @@ class Word {
         Word(std::string, std::string);
 		std::string getWord();
 		virtual std::string getDefinition();
-		virtual int calculateScabbleScore();
+		virtual int calculateScrabbleScore();
 		bool isHyphenated();
+		bool isPalindrome();
 		virtual bool isNoun();
 		virtual bool isVerb();
+		virtual ~Word();
 };
 
 #endif // WORD_H

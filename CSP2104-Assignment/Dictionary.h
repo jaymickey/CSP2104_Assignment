@@ -21,7 +21,7 @@ class Dictionary {
 		const std::string DICTFILE = "dictionary.txt";
 	public:
 		void loadDictionary();
-		Word findWord(std::string);
+		Word* findWord(std::string);
 };
 
 #endif // DICTIONARY_H

@@ -47,10 +47,10 @@ int main() {
     std::cin >> wordString;
 	try {
 		std::cout << "Finding definition for word: " << wordString << std::endl << std::endl;
-		Word word = dict.findWord(wordString);
-		std::cout << word.getDefinition() << std::endl;
-		std::cout << word.calculateScabbleScore() << std::endl;
-		std::cout << word.isHyphenated() << std::endl;
+		Word* word = dict.findWord(wordString);
+		std::cout << word->getDefinition() << std::endl;
+		std::cout << word->calculateScabbleScore() << std::endl;
+		std::cout << word->isHyphenated() << std::endl;
 	} catch (const std::invalid_argument& ex1) { // Catch exception if word not found
 		std::cout << ex1.what() << std::endl;
 	}

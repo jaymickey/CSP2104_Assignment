@@ -12,7 +12,8 @@ enum word_code {
 	eAdjective,
 	eProperNoun,
 	ePreposition,
-	eMisc
+	eMisc,
+	eInvalid
 };
 
 word_code hashIt(std::string const &inString) {
@@ -24,6 +25,7 @@ word_code hashIt(std::string const &inString) {
 	if (inString == "pn") return eProperNoun;
 	if (inString == "prep") return ePreposition;
 	if (inString == "misc") return eMisc;
+	return eInvalid;
 }
 
 void Dictionary::loadDictionary() {
@@ -38,34 +40,38 @@ void Dictionary::loadDictionary() {
 			getline(file, type);
 			getline(file, line);
 			// make_unique returns a unique_ptr of an instance of the type
-			/* switch (::hashIt(type)) {
-				case eNoun:
-					m_wordVector.push_back(std::make_unique<Noun>(word, definition));
-					break;
-				case eVerb:
-					m_wordVector.push_back(std::make_unique<Verb>(word, definition));
-					break;
-				case eNounAndVerb:
-					m_wordVector.push_back(std::make_unique<NounAndVerb>(word, definition));
-					break;
-				case eAdverb:
-					m_wordVector.push_back(std::make_unique<Adverb>(word, definition));
-					break;
-				case eAdjective:
-					m_wordVector.push_back(std::make_unique<Adjective>(word, definition));
-					break;
-				case eProperNoun:
-					m_wordVector.push_back(std::make_unique<ProperNoun>(word, definition));
-					break;
-				case ePreposition:
-					m_wordVector.push_back(std::make_unique<Preposition>(word, definition));
-					break;
-				case eMisc:
-					m_wordVector.push_back(std::make_unique<MiscWord>(word, definition));
-					break;
-				default:
-					m_wordVector.push_back(std::make_unique<Word>(word, definition)); */
-			m_wordVector.push_back(std::make_unique<Noun>(word, definition));
+			switch (::hashIt(type)) {
+			case eNoun:
+				m_wordVector.push_back(std::make_unique<Noun>(word, definition));
+				break;
+			case eVerb:
+				m_wordVector.push_back(std::make_unique<Verb>(word, definition));
+				break;
+			case eNounAndVerb:
+				m_wordVector.push_back(std::make_unique<NounAndVerb>(word, definition));
+				break;
+			case eAdverb:
+				m_wordVector.push_back(std::make_unique<Adverb>(word, definition));
+				break;
+			case eAdjective:
+				m_wordVector.push_back(std::make_unique<Adjective>(word, definition));
+				break;
+			case eProperNoun:
+				m_wordVector.push_back(std::make_unique<ProperNoun>(word, definition));
+				break;
+			case ePreposition:
+				m_wordVector.push_back(std::make_unique<Preposition>(word, definition));
+				break;
+			case eMisc:
+				m_wordVector.push_back(std::make_unique<MiscWord>(word, definition));
+				break;
+			case eInvalid:
+				// Throw an exception if there is in an invalid word type found
+				throw "Invalid word type!";
+				break;
+			default:
+				m_wordVector.push_back(std::make_unique<Word>(word, definition));
+			}
 		}
 	}
 	file.close();
@@ -77,12 +83,12 @@ void Dictionary::loadDictionary() {
 	std::cout << m_wordVector.at(157)->isVerb() << std::endl;
 }
 
-Word Dictionary::findWord(std::string wordString) {
+Word* Dictionary::findWord(std::string wordString) {
     for (auto &i : m_wordVector) {
-        std::string word = i->getWord();
-        if (word == wordString) {
-			return *i;
+        if (i->getWord() == wordString) {
+			return i.get();
 		}
     }
-	throw std::invalid_argument("Word not found!"); // Throw exception if word not found
+	// Throw exception if word not found
+	throw std::invalid_argument("Word not found!");
 }

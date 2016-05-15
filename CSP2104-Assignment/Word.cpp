@@ -2,8 +2,8 @@
 #include <map>
 #include "Word.h"
 
-namespace WordCpp {
-	std::map<char, int> scabbleMap{
+namespace CSP2104 {
+	std::map<char, int> scrabbleMap{
 		{'a', 1}, {'b', 3},
 		{'c', 3}, {'d', 2},
 		{'e', 1}, {'f', 4},
@@ -20,14 +20,6 @@ namespace WordCpp {
 	};
 }
 
-//void Word::setWord(std::string word) {
-//	m_word = word;
-//}
-//
-//void Word::setDefinition(std::string definition) {
-//	m_definition = definition;
-//}
-
 Word::Word() {}
 
 Word::Word(std::string word, std::string definition) :
@@ -41,11 +33,11 @@ std::string Word::getDefinition() {
 	return m_definition;
 }
 
-int Word::calculateScabbleScore() {
+int Word::calculateScrabbleScore() {
 	int score = 0;
 	if (isHyphenated() != true) {
 		for (auto& i : m_word) {
-			score += WordCpp::scabbleMap[i];
+			score += CSP2104::scrabbleMap[i];
 		}
 	}
 	return score;
@@ -55,6 +47,10 @@ bool Word::isHyphenated() {
 	return (m_word.find('-') != std::string::npos);
 }
 
+bool Word::isPalindrome() {
+
+}
+
 bool Word::isNoun() {
 	return false;
 }
@@ -62,3 +58,5 @@ bool Word::isNoun() {
 bool Word::isVerb() {
 	return false;
 }
+
+Word::~Word() {}
