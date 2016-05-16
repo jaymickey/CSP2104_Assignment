@@ -11,7 +11,7 @@ class Word {
 		// Default constuctor. Required for virtual inheritance to work
 		Word();
         Word(std::string, std::string);
-		std::string getWord();
+		virtual std::string getWord();
 		virtual std::string getDefinition();
 		virtual int calculateScrabbleScore();
 		bool isHyphenated();

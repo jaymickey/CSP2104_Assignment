@@ -3,11 +3,13 @@
 #include <string>
 #include "Word.h"
 
-class MiscWord : public Word {
+class MiscWord : virtual public Word {
 	private:
 	public:
+		MiscWord();
 		MiscWord(std::string, std::string);
 		virtual std::string getDefinition();
+		virtual int calculateScrabbleScore();
 };
 
 #endif // MISCWORD_H

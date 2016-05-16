@@ -1,27 +1,28 @@
 #include <iostream>
+#include <Windows.h>
 #include "Dictionary.h"
 
 // No std namespace, as recommended here: http://stackoverflow.com/questions/1452721/why-is-using-namespace-std-in-c-considered-bad-practice
 
 /* Classes:
 		- Word
-			* calculateScrabbleScore
-			* isHyphenated
-			* isPalindrome
-			* isVerb
-			* isNoun
-			- Noun
-				- ProperNoun
+			* calculateScrabbleScore-
+			* isHyphenated-
+			* isPalindrome-
+			* isVerb-
+			* isNoun-
+			- Noun-
+				- ProperNoun-
+				- NounAndVerb-
+			- Verb-
 				- NounAndVerb
-			- Verb
-				- NounAndVerb
-			- Adverb
-			- Adjective
-			- MiscWord
-				- Preposition
+			- Adverb-
+			- Adjective-
+			- MiscWord-
+				- Preposition-
 		- Dictionary
-			* getTotalNumberOfWords
-			* loadDictionary
+			* getTotalNumberOfWords-
+			* loadDictionary-
 
 Word types:
 	n
@@ -40,19 +41,18 @@ void loadMenu() {
 
 // Main function
 int main() {
+	COORD newSize = {80,1000};
+	SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), newSize);
     std::string wordString;
 	Dictionary dict;
 	dict.loadDictionary();
-    std::cout << "Enter the word to find: ";
-    std::cin >> wordString;
-	try {
-		std::cout << "Finding definition for word: " << wordString << std::endl << std::endl;
-		Word* word = dict.findWord(wordString);
-		std::cout << word->getDefinition() << std::endl;
-		std::cout << word->calculateScabbleScore() << std::endl;
-		std::cout << word->isHyphenated() << std::endl;
-	} catch (const std::invalid_argument& ex1) { // Catch exception if word not found
-		std::cout << ex1.what() << std::endl;
-	}
+    //std::cout << "Enter the word to find: ";
+    //std::cin >> wordString;
+	// dict.outputDefinitionAndScore(wordString);
+	// dict.findThreeZ();
+	// dict.findQWithoutU();
+	// dict.listNounAndVerb();
+	 dict.listPalindromes();
+	// dict.listHighestScrabble();
 	system("pause");
 }

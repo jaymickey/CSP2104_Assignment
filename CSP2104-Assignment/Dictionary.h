@@ -22,6 +22,14 @@ class Dictionary {
 	public:
 		void loadDictionary();
 		Word* findWord(std::string);
+		int getTotalNumberOfWords();
+		std::string toLower(std::string);
+		void outputDefinitionAndScore(std::string);
+		void findThreeZ();
+		void findQWithoutU();
+		void listNounAndVerb();
+		void listPalindromes();
+		void listHighestScrabble();
 };
 
 #endif // DICTIONARY_H

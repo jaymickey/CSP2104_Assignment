@@ -1,5 +1,6 @@
 #include <iostream>
 #include <fstream>
+#include <algorithm>
 #include "Dictionary.h"
 
 // enum evaluation for type strings via a hash table
@@ -75,20 +76,119 @@ void Dictionary::loadDictionary() {
 		}
 	}
 	file.close();
-	/* Tests */
-	std::cout << m_wordVector.size() << std::endl;
-	std::cout << m_wordVector.at(157)->getWord() << std::endl;
-	std::cout << m_wordVector.at(157)->getDefinition() << std::endl;
-	std::cout << m_wordVector.at(157)->isNoun() << std::endl;
-	std::cout << m_wordVector.at(157)->isVerb() << std::endl;
+	// Tests:
+	/* std::cout << m_wordVector.size() << std::endl;
+	std::cout << m_wordVector.at(460)->getWord() << std::endl;
+	std::cout << m_wordVector.at(460)->getDefinition() << std::endl;
+	std::cout << m_wordVector.at(460)->isNoun() << std::endl;
+	std::cout << m_wordVector.at(460)->isVerb() << std::endl; */
 }
 
 Word* Dictionary::findWord(std::string wordString) {
     for (auto &i : m_wordVector) {
-        if (i->getWord() == wordString) {
+        if (toLower(i->getWord()) == wordString) {
 			return i.get();
 		}
     }
 	// Throw exception if word not found
 	throw std::invalid_argument("Word not found!");
+}
+
+int Dictionary::getTotalNumberOfWords() {
+	return m_wordVector.size();
+}
+
+std::string Dictionary::toLower(std::string inString) {
+	// Convert to lowercase
+	// Source: https://notfaq.wordpress.com/2007/08/04/cc-convert-string-to-upperlower-case/
+	std::transform(inString.begin(), inString.end(), inString.begin(), ::tolower);
+	return inString;
+}
+
+void Dictionary::outputDefinitionAndScore(std::string wordString) {
+
+	// Variables for splitting definition
+	// Source: http://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+	// std::string delim = ";";
+	// size_t last = 0, next = 0;
+
+	std::cout << "Finding definition for word: " << wordString << std::endl << std::endl;
+	try {
+		Word* word = findWord(toLower(wordString));
+		std::cout << "Definitions for word: " << word->getWord() << std::endl;
+		
+		/*std::string wordDefinition = word->getDefinition();
+		while ((next = wordDefinition.find(delim, last)) != std::string::npos) {
+			std::cout << wordDefinition.substr(last, next - last) << std::endl;
+			last = next + 2;
+		}
+		std::cout << wordDefinition.substr(last) << std::endl << std::endl;*/
+
+		std::cout << word->getDefinition() << std::endl << std::endl;
+		int scrabbleScore = word->calculateScrabbleScore();
+		if (scrabbleScore == 0) {
+			std::cout << "\"" << word->getWord() << "\"" << " not valid in scrabble." << std::endl;
+		}
+		else {
+			std::cout << "Scrabble score for " << word->getWord() << ": " << scrabbleScore << std::endl;
+		}
+	}
+	catch (const std::invalid_argument& ex1) { // Catch exception if word not found
+		std::cout << ex1.what() << std::endl;
+	}
+}
+
+void Dictionary::findThreeZ() {
+	for (auto &i : m_wordVector) {
+		std::string word = toLower(i->getWord());
+		if (std::count(std::begin(word), std::end(word), 'z') > 3) {
+			std::cout << word << ", ";
+		}
+	}
+}
+
+void Dictionary::findQWithoutU() {
+	for (auto &i : m_wordVector) {
+		std::string word = toLower(i->getWord());
+		size_t pos = 0;
+		if ((pos = word.find('q')) != std::string::npos) {
+			if (word[pos + 1] != 'u') {
+				std::cout << word << ", ";
+			}
+		}
+	}
+}
+
+void Dictionary::listNounAndVerb() {
+	for (auto &i : m_wordVector) {
+		if ((i->isVerb()) && (i->isNoun())) {
+			std::cout << i->getWord() << ", ";
+		}
+	}
+}
+
+void Dictionary::listPalindromes() {
+	for (auto &i : m_wordVector) {
+		if (i->isPalindrome()) {
+			std::cout << i->getWord() << std::endl;
+		}
+	}
+}
+
+void Dictionary::listHighestScrabble() {
+	int highestScore = 0;
+	std::vector<std::string> highestScoreWords;
+	for (auto &i : m_wordVector) {
+		int currentScore = i->calculateScrabbleScore();
+		if (currentScore > highestScore) {
+			highestScoreWords.clear();
+			highestScore = currentScore;
+			highestScoreWords.push_back(i->getWord());
+		} else if (currentScore == highestScore) {
+			highestScoreWords.push_back(i->getWord());
+		}
+	}
+	for (std::string i : highestScoreWords) {
+		std::cout << i << std::endl;
+	}
 }

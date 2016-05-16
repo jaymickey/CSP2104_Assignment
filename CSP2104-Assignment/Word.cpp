@@ -47,8 +47,9 @@ bool Word::isHyphenated() {
 	return (m_word.find('-') != std::string::npos);
 }
 
+// Source: http://stackoverflow.com/questions/8362572/check-if-a-string-is-palindrome
 bool Word::isPalindrome() {
-
+	return equal(m_word.begin(), m_word.begin() + m_word.size() / 2, m_word.rbegin());
 }
 
 bool Word::isNoun() {
