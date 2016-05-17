@@ -30,6 +30,7 @@ class Dictionary {
 		void listNounAndVerb();
 		void listPalindromes();
 		void listHighestScrabble();
+		void findScrabbleWord();
 };
 
 #endif // DICTIONARY_H

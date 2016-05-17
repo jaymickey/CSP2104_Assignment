@@ -52,7 +52,8 @@ int main() {
 	// dict.findThreeZ();
 	// dict.findQWithoutU();
 	// dict.listNounAndVerb();
-	 dict.listPalindromes();
+	// dict.listPalindromes();
 	// dict.listHighestScrabble();
+	dict.findScrabbleWord();
 	system("pause");
 }

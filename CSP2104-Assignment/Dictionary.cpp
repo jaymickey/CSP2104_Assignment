@@ -192,3 +192,39 @@ void Dictionary::listHighestScrabble() {
 		std::cout << i << std::endl;
 	}
 }
+
+void Dictionary::findScrabbleWord() {
+	std::string letterString;
+	int highestScore = 0;
+	std::vector<std::string> possibleWords;
+	bool found = false;
+	std::cout << "Enter a string of letters: ";
+	std::cin >> letterString;
+	for (auto &i : m_wordVector) {
+		std::string word = i->getWord();
+		for (char j : word) {
+			if (std::count(word.begin(), word.end(), j) <= std::count(letterString.begin(), letterString.end(), j)) {
+				found = true;
+			} else {
+				found = false;
+				break;
+			}
+		}
+		if (found == true) {
+			int currentScore = i->calculateScrabbleScore();
+			if (currentScore > highestScore) {
+				possibleWords.clear();
+				highestScore = currentScore;
+				possibleWords.push_back(word);
+			}
+			else if (currentScore == highestScore) {
+				possibleWords.push_back(word);
+			}
+		}
+	}
+	std::cout << "Highest scoring words possible with letters \"" << letterString << "\"" << std::endl;
+	for (std::string word : possibleWords) {
+		std::cout << word << std::endl;
+		std::cout << "Score: " << highestScore << std::endl;
+	}
+}
