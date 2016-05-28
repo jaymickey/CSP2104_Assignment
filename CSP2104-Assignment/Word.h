@@ -9,7 +9,7 @@ class Word {
 		std::string m_definition;
 	public:
 		// Default constuctor. Required for virtual inheritance to work
-		Word();
+		Word() {}
         Word(std::string, std::string);
 		virtual std::string getWord();
 		virtual std::string getDefinition();
@@ -18,7 +18,7 @@ class Word {
 		bool isPalindrome();
 		virtual bool isNoun();
 		virtual bool isVerb();
-		virtual ~Word();
+		virtual ~Word() {}
 };
 
 #endif // WORD_H

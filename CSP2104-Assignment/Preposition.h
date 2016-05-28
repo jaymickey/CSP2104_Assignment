@@ -7,7 +7,7 @@ class Preposition : public MiscWord {
 	private:
 	public:
 		Preposition(std::string, std::string);
-		virtual std::string getDefinition();
+		std::string getDefinition();
 };
 
 #endif // PREPOSITION_H

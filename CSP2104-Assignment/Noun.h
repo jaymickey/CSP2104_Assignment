@@ -6,10 +6,10 @@
 class Noun : virtual public Word {
 	private:
 	public:
-		Noun();
+		// Noun() {}
 		Noun(std::string, std::string);
 		virtual std::string getDefinition();
-		virtual bool isNoun();
+		bool isNoun();
 };
 
 #endif // NOUN_H

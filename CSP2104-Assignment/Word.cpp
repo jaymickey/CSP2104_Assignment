@@ -2,6 +2,7 @@
 #include <map>
 #include "Word.h"
 
+// Mapping letters to numbers
 namespace CSP2104 {
 	std::map<char, int> scrabbleMap{
 		{'a', 1}, {'b', 3},
@@ -19,8 +20,6 @@ namespace CSP2104 {
 		{'y', 1}, {'z', 3}
 	};
 }
-
-Word::Word() {}
 
 Word::Word(std::string word, std::string definition) :
     m_word(word), m_definition(definition) {}
@@ -59,5 +58,3 @@ bool Word::isNoun() {
 bool Word::isVerb() {
 	return false;
 }
-
-Word::~Word() {}

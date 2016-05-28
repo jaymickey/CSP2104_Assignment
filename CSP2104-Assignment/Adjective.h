@@ -7,7 +7,7 @@ class Adjective : public Word {
 	private:
 	public:
 		Adjective(std::string, std::string);
-		virtual std::string getDefinition();
+		std::string getDefinition();
 };
 
 #endif // ADJECTIVE_H

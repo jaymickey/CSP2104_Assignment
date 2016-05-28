@@ -3,13 +3,13 @@
 #include <string>
 #include "Noun.h"
 
-class ProperNoun : public Noun {
+class ProperNoun : virtual public Noun {
 	private:
 	public:
 		ProperNoun(std::string, std::string);
-		virtual std::string getWord();
-		virtual std::string getDefinition();
-		virtual int calculateScrabbleScore();
+		std::string getWord();
+		std::string getDefinition();
+		int calculateScrabbleScore();
 };
 
 #endif // PROPERNOUN_H

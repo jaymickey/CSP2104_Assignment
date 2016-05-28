@@ -7,7 +7,7 @@ class Adverb : public Word {
 	private:
 	public:
 		Adverb(std::string, std::string);
-		virtual std::string getDefinition();
+		std::string getDefinition();
 };
 
 #endif // ADVERB_H

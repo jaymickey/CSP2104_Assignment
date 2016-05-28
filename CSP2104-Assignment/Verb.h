@@ -6,10 +6,10 @@
 class Verb : virtual public Word {
 	private:
 	public:
-		Verb();
+		// Verb() {}
 		Verb(std::string, std::string);
 		virtual std::string getDefinition();
-		virtual bool isVerb();
+		bool isVerb();
 };
 
 #endif // VERB_H

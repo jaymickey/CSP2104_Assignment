@@ -1,7 +1,5 @@
 #include "MiscWord.h"
 
-MiscWord::MiscWord() {}
-
 MiscWord::MiscWord(std::string word, std::string definition) :
 	Word::Word(word, definition) {}
 

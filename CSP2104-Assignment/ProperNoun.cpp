@@ -1,7 +1,7 @@
 #include "ProperNoun.h"
 
 ProperNoun::ProperNoun(std::string word, std::string definition) :
-	Word::Word(word, definition) {}
+	Word(word, definition), Noun(word, definition) {}
 
 std::string ProperNoun::getWord() {
 	std::string word = Word::getWord();

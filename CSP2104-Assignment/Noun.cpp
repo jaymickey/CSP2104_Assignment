@@ -1,7 +1,5 @@
 #include "Noun.h"
 
-Noun::Noun() {}
-
 Noun::Noun(std::string word, std::string definition) :
 	Word::Word(word, definition) {}
 

@@ -8,7 +8,7 @@ class NounAndVerb : public Noun, public Verb {
 	private:
 	public:
 		NounAndVerb(std::string, std::string);
-		virtual std::string getDefinition();
+		std::string getDefinition();
 };
 
 #endif // NOUNANDVERB_H
