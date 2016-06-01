@@ -72,7 +72,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LinkIncremental>true</LinkIncremental>
     <CodeAnalysisRuleSet>C:\Program Files (x86)\Microsoft Visual Studio 14.0\Team Tools\Static Analysis Tools\Rule Sets\NativeRecommendedRules.ruleset</CodeAnalysisRuleSet>
-    <RunCodeAnalysis>true</RunCodeAnalysis>
+    <RunCodeAnalysis>false</RunCodeAnalysis>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
@@ -90,7 +90,7 @@
       <WarningLevel>Level3</WarningLevel>
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
-      <EnablePREfast>true</EnablePREfast>
+      <EnablePREfast>false</EnablePREfast>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -147,6 +147,7 @@
   <ItemGroup>
     <ClCompile Include="Adjective.cpp" />
     <ClCompile Include="Adverb.cpp" />
+    <ClCompile Include="AuditLog.cpp" />
     <ClCompile Include="Dictionary.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MiscWord.cpp" />
@@ -154,34 +155,23 @@
     <ClCompile Include="NounAndVerb.cpp" />
     <ClCompile Include="Preposition.cpp" />
     <ClCompile Include="ProperNoun.cpp" />
+    <ClCompile Include="TriGrams.cpp" />
     <ClCompile Include="Verb.cpp" />
     <ClCompile Include="Word.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Adjective.h" />
     <ClInclude Include="Adverb.h" />
+    <ClInclude Include="AuditLog.h" />
     <ClInclude Include="Dictionary.h" />
     <ClInclude Include="MiscWord.h" />
     <ClInclude Include="Noun.h" />
     <ClInclude Include="NounAndVerb.h" />
     <ClInclude Include="Preposition.h" />
     <ClInclude Include="ProperNoun.h" />
+    <ClInclude Include="TriGrams.h" />
     <ClInclude Include="Verb.h" />
     <ClInclude Include="Word.h" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
-  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
-  <ImportGroup Label="ExtensionTargets">
-    <Import Project="..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets" Condition="Exists('..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets')" />
-    <Import Project="..\packages\Microsoft.CppCoreCheck.14.0.23917.1\build\native\Microsoft.CppCoreCheck.targets" Condition="Exists('..\packages\Microsoft.CppCoreCheck.14.0.23917.1\build\native\Microsoft.CppCoreCheck.targets')" />
-  </ImportGroup>
-  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
-    <PropertyGroup>
-      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
-    </PropertyGroup>
-    <Error Condition="!Exists('..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Gsl.0.1.2.1\build\native\Microsoft.Gsl.targets'))" />
-    <Error Condition="!Exists('..\packages\Microsoft.CppCoreCheck.14.0.23917.1\build\native\Microsoft.CppCoreCheck.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CppCoreCheck.14.0.23917.1\build\native\Microsoft.CppCoreCheck.targets'))" />
-  </Target>
 </Project>

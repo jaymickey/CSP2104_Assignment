@@ -2,7 +2,7 @@
 #include <map>
 #include "Word.h"
 
-// Mapping letters to numbers
+// Mapping letters to numbers to create a scrabble score
 namespace CSP2104 {
 	std::map<char, int> scrabbleMap{
 		{'a', 1}, {'b', 3},
@@ -46,7 +46,7 @@ bool Word::isHyphenated() {
 	return (m_word.find('-') != std::string::npos);
 }
 
-// Source: http://stackoverflow.com/questions/8362572/check-if-a-string-is-palindrome
+// Source: http://stackoverflow.com/a/8362657
 bool Word::isPalindrome() {
 	return equal(m_word.begin(), m_word.begin() + m_word.size() / 2, m_word.rbegin());
 }

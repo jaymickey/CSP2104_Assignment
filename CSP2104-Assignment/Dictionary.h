@@ -3,21 +3,22 @@
 #include <string>
 #include <vector>
 #include <memory>
+#include "AuditLog.h"
 #include "Word.h"
-
 
 class Dictionary {
 	private:
 		// unique_ptr allows for derived classes to be stored in the vector
-		// Source: http://stackoverflow.com/questions/10154977/c-vector-with-inheritance
+		// Source: http://stackoverflow.com/a/10155007
 		std::vector<std::unique_ptr<Word>> m_wordVector;
-		const std::string DICTFILE = "dictionary.txt";
+		const std::string M_DICTFILE = "dictionary.txt";
+		AuditLog m_logFile;
 	public:
 		void loadDictionary();
-		Word *findWord(const std::string &);
+		Word *findWord(const std::string &, bool);
 		int getTotalNumberOfWords();
-		std::string toLower(std::string);
-		void printWords(const std::vector<std::string> *);
+		std::string toLower(const std::string &);
+		void printWords(const std::vector<std::string> &);
 		void outputDefinitionAndScore();
 		void findThreeZ();
 		void findQWithoutU();

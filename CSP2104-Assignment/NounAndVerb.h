@@ -3,6 +3,7 @@
 #include <string>
 #include "Noun.h"
 #include "Verb.h"
+#include "Word.h"
 
 class NounAndVerb : public Noun, public Verb {
 	private:

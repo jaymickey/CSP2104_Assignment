@@ -2,6 +2,7 @@
 #define PROPERNOUN_H
 #include <string>
 #include "Noun.h"
+#include "Word.h"
 
 class ProperNoun : virtual public Noun {
 	private:

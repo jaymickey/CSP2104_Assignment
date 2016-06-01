@@ -48,6 +48,12 @@
     <ClCompile Include="Verb.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="TriGrams.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="AuditLog.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Dictionary.h">
@@ -80,8 +86,11 @@
     <ClInclude Include="MiscWord.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="packages.config" />
+    <ClInclude Include="TriGrams.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="AuditLog.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

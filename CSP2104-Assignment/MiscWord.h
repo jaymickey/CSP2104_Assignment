@@ -6,7 +6,7 @@
 class MiscWord : virtual public Word {
 	private:
 	public:
-		MiscWord() {}
+		// MiscWord() {}
 		MiscWord(std::string, std::string);
 		virtual std::string getDefinition();
 		int calculateScrabbleScore();

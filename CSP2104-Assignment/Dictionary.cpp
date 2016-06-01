@@ -12,7 +12,7 @@
 #include "Dictionary.h"
 
 // enum evaluation for type strings via a hash table
-// Source: http://stackoverflow.com/questions/650162/why-switch-statement-cannot-be-applied-on-strings
+// Source: http://stackoverflow.com/a/650307
 enum word_code {
 	eNoun,
 	eVerb,
@@ -25,7 +25,7 @@ enum word_code {
 	eInvalid
 };
 
-word_code hashIt(std::string const inString) {
+word_code hashIt(const std::string &inString) {
 	if (inString == "n") return eNoun;
 	if (inString == "v") return eVerb;
 	if (inString == "n_and_v") return eNounAndVerb;
@@ -38,18 +38,19 @@ word_code hashIt(std::string const inString) {
 }
 
 void Dictionary::loadDictionary() {
-	// Open text file
-	std::ifstream file(DICTFILE);
+	std::ifstream file(M_DICTFILE);
 	// Temp variables for loading lines
 	std::string line, word, definition, type;
 	// Check if file is open
 	if (file.is_open()) {
+		/* Read the file line by line and load into temp variables, this really only 
+		works because we know the exact format of the file */
 		// Avoid additional loop with .eof()
 		while (getline(file, word)) {
 			getline(file, definition);
 			getline(file, type);
 			getline(file, line);
-			// Create object based on word types
+			// Create object based on word type
 			switch (::hashIt(type)) {
 			case eNoun:
 				// make_unique returns a unique_ptr to an instance of the type
@@ -84,46 +85,49 @@ void Dictionary::loadDictionary() {
 				m_wordVector.push_back(std::make_unique<Word>(word, definition));
 			}
 		}
+		file.close();
+	} else {
+		// Throw exception if file couldn't be opened
+		throw "File could not be opened!";
 	}
-	file.close();
-	// Tests:
-	/* std::cout << m_wordVector.size() << std::endl;
-	std::cout << m_wordVector.at(460)->getWord() << std::endl;
-	std::cout << m_wordVector.at(460)->getDefinition() << std::endl;
-	std::cout << m_wordVector.at(460)->isNoun() << std::endl;
-	std::cout << m_wordVector.at(460)->isVerb() << std::endl; */
 }
 
-Word *Dictionary::findWord(const std::string &wordString) {
-    for (auto &i : m_wordVector) {
+Word *Dictionary::findWord(const std::string &wordString, bool log = true) {
+	// Add the word to the log file
+	if (log) m_logFile.addToLog(toLower(wordString));
+	for (auto &i : m_wordVector) {
         if (toLower(i->getWord()) == toLower(wordString)) {
 			return i.get();
 		}
     }
-	// Throw exception if word not found
-	throw std::invalid_argument("Word not found!");
+	// Return a nullptr if word not found
+	// Originally threw an exception, but a nullptr is easier to work with
+	return nullptr;
 }
 
 int Dictionary::getTotalNumberOfWords() {
 	return m_wordVector.size();
 }
 
-std::string Dictionary::toLower(std::string inString) {
+std::string Dictionary::toLower(const std::string &inString) {
 	// Convert to lowercase
 	// Source: https://notfaq.wordpress.com/2007/08/04/cc-convert-string-to-upperlower-case/
-	std::transform(inString.begin(), inString.end(), inString.begin(), ::tolower);
-	return inString;
+	std::string lowerString = inString;
+	std::transform(inString.begin(), inString.end(), lowerString.begin(), ::tolower);
+	return lowerString;
 }
 
 /* Instead of including formatting code for every function, given the formatting will
-generally follow the same rules, this function does it instead */
-void Dictionary::printWords(const std::vector<std::string> *wordVector) {
+generally follow the same rules, this function does it instead. Originally I simply printed
+the word, however, adding to a vector allows for greater formatting control. In this case
+I opted for aesthetics over efficiency. */
+void Dictionary::printWords(const std::vector<std::string> &wordVector) {
 	int formattingInt = 1;
 	const int WORDSPERLINE = 10;
-	for (const std::string &word : *wordVector) {
+	for (const std::string &word : wordVector) {
 		// Test if current word is the last word in the vector
 		// Only possible because we know each word is unique
-		if (word != wordVector->back()) {
+		if (word != wordVector.back()) {
 			// Add a line break after 5 words have been printed
 			std::cout << word << (((formattingInt % WORDSPERLINE) == 0) ? "\n" : ", ");
 			formattingInt++;
@@ -137,7 +141,7 @@ void Dictionary::printWords(const std::vector<std::string> *wordVector) {
 void Dictionary::outputDefinitionAndScore() {
 
 	// Variables for splitting definition
-	// Source: http://stackoverflow.com/questions/14265581/parse-split-a-string-in-c-using-string-delimiter-standard-c
+	// Source: http://stackoverflow.com/a/14266139
 	std::string delim = "  ";
 	size_t last = 0, next = 0;
 
@@ -147,33 +151,36 @@ void Dictionary::outputDefinitionAndScore() {
 	std::cout << std::endl;
 
 	std::cout << "Finding definition for word: " << wordString << std::endl << std::endl;
-	try {
-		Word *word = findWord(wordString);
+	// nullptr will evaluate to bool false
+	if (Word *word = findWord(wordString)) {
 		std::cout << "Definitions for word: " << word->getWord() << std::endl;
 		
 		std::string wordDefinition = word->getDefinition();
+		/* I chose to split by double space because definitions that are separated
+		by a single space (after ;) appear to be related. Readability is slightly
+		improved this way */
 		while ((next = wordDefinition.find(delim, last)) != std::string::npos) {
 			std::cout << wordDefinition.substr(last, next - last) << std::endl;
 			last = next + 2;
 		}
 		std::cout << wordDefinition.substr(last) << std::endl << std::endl;
 
-		// std::cout << word->getDefinition() << std::endl << std::endl;
 		int scrabbleScore = word->calculateScrabbleScore();
 		if (scrabbleScore == 0) {
+			// Words with a score of 0 are invalid
 			std::cout << "\"" << word->getWord() << "\"" << " not valid in scrabble." << std::endl << std::endl;
 		}
 		else {
 			std::cout << "Scrabble score for " << word->getWord() << ": " << scrabbleScore << std::endl << std::endl;
 		}
 	}
-	// Catch exception if word not found
-	catch (const std::invalid_argument &ex1) {
-		std::cout << ex1.what() << std::endl << std::endl;
+	else {
+		std::cout << "Word not found!" << std::endl;
 	}
 }
 
 void Dictionary::findThreeZ() {
+	std::cout << "Words containing more than 3 'z''s: " << std::endl << std::endl;
 	for (auto &i : m_wordVector) {
 		// Convert to lower to ensure consistency
 		std::string word = toLower(i->getWord());
@@ -193,16 +200,14 @@ void Dictionary::findQWithoutU() {
 		size_t pos = 0;
 		if ((pos = word.find('q')) != std::string::npos) {
 			if (word[pos + 1] != 'u') {
-				// std::cout << word << std::endl;
 				matches.push_back(i->getWord());
 			}
 		}
 	}
 	std::cout << "Words with 'q' not followed by 'u': " << std::endl << std::endl;
-	printWords(&matches);
+	printWords(matches);
 }
 
-// Find all words that are both nouns and verbs
 void Dictionary::listNounAndVerb() {
 	std::vector<std::string> matches;
 	for (auto &i : m_wordVector) {
@@ -211,7 +216,7 @@ void Dictionary::listNounAndVerb() {
 		}
 	}
 	std::cout << "Words that are both a noun and a verb: " << std::endl << std::endl;
-	printWords(&matches);
+	printWords(matches);
 }
 
 void Dictionary::listPalindromes() {
@@ -222,7 +227,7 @@ void Dictionary::listPalindromes() {
 		}
 	}
 	std::cout << "Words that are palindromes: " << std::endl << std::endl;
-	printWords(&matches);
+	printWords(matches);
 }
 
 void Dictionary::listHighestScrabble() {
@@ -238,8 +243,8 @@ void Dictionary::listHighestScrabble() {
 			highestScoreWords.push_back(i->getWord());
 		}
 	}
-	std::cout << "Highest scoring scrabbles word(s): " << std::endl;
-	printWords(&highestScoreWords);
+	std::cout << "Highest scoring scrabbles word(s): " << std::endl << std::endl;
+	printWords(highestScoreWords);
 	std::cout << "Scrabble score: " << highestScore << std::endl << std::endl;
 }
 
@@ -281,17 +286,16 @@ void Dictionary::findScrabbleWord() {
 	}
 
 	std::cout << "Highest scoring words possible with letters \"" << letterString << "\":" << std::endl << std::endl;
-	printWords(&possibleWords);
+	printWords(possibleWords);
 	std::cout << "Score: " << highestScore << std::endl << std::endl;
 }
 
 void Dictionary::findAnagrams() {
-	// Will be used to format the final output
-	int formattingInt = 1;
 	std::vector<std::string> matches;
 	std::string wordString;
 	std::cout << "Enter the word you wish to find anagrams for: ";
 	std::cin >> wordString;
+	wordString = toLower(wordString);
 	std::cout << std::endl;
 	// Sort is destructive to the original string, so making a copy before sorting is required
 	std::string originalWord = wordString;
@@ -301,17 +305,16 @@ void Dictionary::findAnagrams() {
 		std::string word = toLower(i->getWord());
 		// Skip words that are not of the same length, as we know these cannot be anagrams
 		if (wordString.length() == word.length() && word != originalWord) {
+			// Now we sort the word from the dictionary to compare
 			std::sort(word.begin(), word.end());
-			if (toLower(wordString) == word) {
-				// If the sorted strings match, add to mataches vector
+			if (wordString == word) {
 				matches.push_back(i->getWord());
-				/* Originally I simply printed the word, however, adding to a vector
-				allows for greater formatting control. In this case I opted for aesthetics
-				over efficiency. */
 			}
 		}
 	}
-
-	std::cout << "Anagrams for \"" << originalWord << "\":" << std::endl << std::endl;
-	printWords(&matches);
+	if (!matches.empty()) {
+		std::cout << "Anagrams for \"" << originalWord << "\":" << std::endl << std::endl;
+		printWords(matches);
+	} else 
+		std::cout << "No anagrams for \"" << originalWord << "\"!" << std::endl << std::endl;
 }
